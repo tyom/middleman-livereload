@@ -1,4 +1,4 @@
-require 'rack/livereload'
+require 'rack-livereload'
 require 'middleman-livereload/reactor'
 
 module Middleman
@@ -8,6 +8,7 @@ module Middleman
     option :apply_css_live, true, 'Apply CSS changes live, without reloading'
     option :no_swf, false, 'Disable Flash WebSocket polyfill for browsers that support native WebSockets'
     option :host, Socket.ip_address_list.find(->{ Addrinfo.ip 'localhost' }, &:ipv4_private?).ip_address, 'Host to bind LiveReload API server to'
+    option :animate, true, 'Animate change transitions'
 
     def initialize(app, options_hash={}, &block)
       super
@@ -20,6 +21,7 @@ module Middleman
       host = options.host
       no_swf = options.no_swf
       options_hash = options.to_h
+      animate = options.animate
 
       app.ready do
         if @reactor
@@ -56,7 +58,8 @@ module Middleman
 
         # Use the vendored livereload.js source rather than trying to get it from Middleman
         # https://github.com/johnbintz/rack-livereload#which-livereload-script-does-it-use
-        use ::Rack::LiveReload, :port => port, :host => host, :no_swf => no_swf, :source => :vendored
+        use ::Rack::LiveReload, :port => port, :host => host, :no_swf => no_swf, :source => :vendored,
+          :animate => animate
       end
     end
   end

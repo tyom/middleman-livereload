@@ -13,6 +13,18 @@ middleman init MY_PROJECT
 
 If you already have a Middleman project: Add `gem "middleman-livereload", "~> 3.1.0"` to your `Gemfile` and run `bundle install`
 
+Add the following to your `Gemfile` and run `bundle install`.
+This will use a custom build of Rack Livereload to enable animated change transitions.
+
+```
+gem "rack-livereload",
+  git:    'git://github.com/tyom/rack-livereload.git',
+  branch: 'livereload-animate'
+gem "middleman-livereload",
+    git: "git@github.com:tyom/middleman-livereload.git",
+    branch: "animate-transitions"
+```
+
 ## Configuration
 
 ```
@@ -36,6 +48,9 @@ Whether live reload should attempt to reload javascript / css 'in-place', withou
 #### `:no_swf`
 
 Disable Flash polyfil for browsers that support native WebSockets.
+
+### `:animate`
+Whether live reload change transitions should be animated. Defaults to `true`.
 
 ## Build & Dependency Status
 
