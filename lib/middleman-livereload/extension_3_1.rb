@@ -9,6 +9,7 @@ module Middleman
     option :no_swf, false, 'Disable Flash WebSocket polyfill for browsers that support native WebSockets'
     option :host, Socket.ip_address_list.find(->{ Addrinfo.ip 'localhost' }, &:ipv4_private?).ip_address, 'Host to bind LiveReload API server to'
     option :animate, true, 'Animate change transitions'
+    option :reload_path, nil, 'Path to reload if only a specific file needs to be reloaded'
 
     def initialize(app, options_hash={}, &block)
       super
@@ -22,6 +23,7 @@ module Middleman
       no_swf = options.no_swf
       options_hash = options.to_h
       animate = options.animate
+      reload_path = options.reload_path
 
       app.ready do
         if @reactor
@@ -35,7 +37,7 @@ module Middleman
 
           logger.debug "LiveReload: File changed - #{file}"
 
-          reload_path = "#{Dir.pwd}/#{file}"
+          reload_path ||= "#{Dir.pwd}/#{file}"
 
           file_url = sitemap.file_to_path(file)
           if file_url
